@@ -117,8 +117,12 @@ public class 预约界面 extends JFrame {
 			public void actionPerformed(ActionEvent e) 
 			{
 				//监听函数
+<<<<<<< Updated upstream
 				JFrame vv=new 抽取口罩();
 				vv.setVisible(true);
+=======
+				setVisible(false);
+>>>>>>> Stashed changes
 			}
 		});
 		btnNewButton_1.setBounds(600, 33, 124, 23);
