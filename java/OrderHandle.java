@@ -9,11 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 import test.DBUtil;
 
 public class OrderHandle {
 	
+	static int num = 1;
 	static int cnt = 1; //计数表名后的数字
 	static String tableName = "orders" + cnt; //表名
 	
@@ -77,6 +79,7 @@ public class OrderHandle {
 		tableName = "orders" + cnt;
 		for(int i = 0; i < 3; i++)
         	table[i] = "dispatch" + Integer.parseInt(table[i].substring(8));
+		num = 1; //预约编号重置
 	}
 	
 	/*
@@ -87,7 +90,7 @@ public class OrderHandle {
 		String sql = "insert into " + tableName + " values(?, ?, ?, ?, ?)";
 		try (Connection c = DBUtil.getConnection();
 				PreparedStatement ps = c.prepareStatement(sql)){
-			ps.setInt(1, info.getOrderid());	//预约表编号
+			ps.setInt(1, num++);	//预约表编号
 			ps.setString(2, info.getUid());		//身份证号
 			ps.setString(3, info.getUname());	//姓名
 			ps.setString(4, info.getUtel());	//手机号码
@@ -99,7 +102,7 @@ public class OrderHandle {
 	}
 	
 	/*
-	 * 简单校验身份证号码是否合法
+	 * 简单校验身份证号码是否合法（合法：返回true）
 	 * param orderid
 	 * return boolean
 	 */
@@ -220,4 +223,12 @@ public class OrderHandle {
         }
         return true;
     }
+	
+	
+	/*
+	 * 返回预约编号
+	 */
+	public String getOrderiD() {
+		return cnt + "-" + num;
+	}
 }
