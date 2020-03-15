@@ -2,10 +2,13 @@ package test;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 import test.DBUtil;
 
@@ -19,11 +22,11 @@ public class OrderHandle {
 		String sql = "insert into orders values(?, ?, ?, ?, ?)";
 		try (Connection c = DBUtil.getConnection();
 				PreparedStatement ps = c.prepareStatement(sql)){
-			ps.setInt(1, info.getOrderid());        //预约编号
-			ps.setString(2, info.getUid()); //身份证号
-			ps.setString(3, info.getUname()); //姓名
-			ps.setString(4, info.getUtel()); //手机号码
-			ps.setInt(5, info.getMasknum());        //口罩数量
+			ps.setInt(1, info.getOrderid());	//预约编号
+			ps.setString(2, info.getUid());		//身份证号
+			ps.setString(3, info.getUname());	//姓名
+			ps.setString(4, info.getUtel());	//手机号码
+			ps.setInt(5, info.getMasknum());	//口罩数量
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -31,11 +34,11 @@ public class OrderHandle {
 	}
 	
 	/*
-	 * 简单校验身份证号码是否正确
+	 * 简单校验身份证号码是否合法
 	 * param orderid
 	 * return boolean
 	 */
-	public static boolean checkOrderid(String orderid) {
+	public boolean IsLegalOrderid(String orderid) {
 		
 		// 身份证号码必须为数字(18位的新身份证最后一位可以是x)
 		Pattern pt = Pattern.compile("(^\\d{15}$)|(\\d{17}(?:\\d|x|X)$)");
@@ -80,7 +83,7 @@ public class OrderHandle {
 	 * param utel
 	 * return boolean
 	 */
-	public static boolean checkUtel(String utel) {
+	public boolean checkUtel(String utel) {
 		String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";
 		if(utel.length() != 11)
 			return false;
@@ -94,11 +97,11 @@ public class OrderHandle {
 	}
 	
 	/*
-	 * 验证口罩数量
+	 * 验证单个用户最高可预约口罩数量是否超出
 	 * param masknum
 	 * return boolean
 	 */
-	public static boolean checkMasknum(String masknum) {
+	public boolean checkMasknum(String masknum) {
 		int Max = 3; //如果需要设置总量再改此处
 		int num = Integer.parseInt(masknum);
 		if(num > Max)
@@ -106,5 +109,21 @@ public class OrderHandle {
 		return true;
 	}
 	
-	
+	/*
+	 * 检查该用户是否已登记
+	 */
+	public boolean isRegister(String orderid, String utel) {
+		String sql = "select * from orders where orderid = '" + orderid + "'"
+					+" or utel = '" + utel +"'";
+		try (Connection c = DBUtil.getConnection();
+				PreparedStatement ps = c.prepareStatement(sql)){
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
 }
