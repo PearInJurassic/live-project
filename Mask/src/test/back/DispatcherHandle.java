@@ -144,7 +144,9 @@ public class DispatcherHandle {
         Random rm = new Random(1);
 
         while (hs.size() != num) {
-
+	    if(n == 0)
+        	break;
+            n--;
             hs.add(rm.nextInt(sum) + 1);
         }
     }
