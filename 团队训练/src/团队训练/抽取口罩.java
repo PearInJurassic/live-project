@@ -78,7 +78,7 @@ public class 抽取口罩 extends JFrame {
 			public void actionPerformed(ActionEvent e) 
 			{
 					//监听函数
-					JFrame vv=new 预约界面();
+					JFrame vv=new 查询界面();
 					vv.setVisible(true);
 			}
 			});
