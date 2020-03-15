@@ -8,21 +8,58 @@ import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 import test.DBUtil;
 
 public class OrderHandle {
+	
+	static int cnt = 1; //计数表名后的数字
+	static String tableName = "orders" + cnt; //表名
+	/*
+	 * 点击开始预约新建预约表
+	 */
+	public void createTable() {
+		String sql;
+		try (Connection c = DBUtil.getConnection()){
+			while(true) {
+				ResultSet rs = c.getMetaData().getTables(null, null, tableName, null);
+				if (rs.next()) {
+					cnt++;
+					tableName = "orders" + cnt;
+				} else{
+					sql = "create table " + tableName
+							+ "(orderid int primary key,"
+							+ "uid varchar(18) not null,"
+							+ "uname varchar(45) not null,"
+							+ "utel varchar(45) not null,"
+							+ "masknum int not null)"; 
+					break;
+				}
+			}
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 点击结束预约这张表信息固定不再更改（即跳过这张表）
+	 */
+	public void finishTable() {
+		cnt++;
+		tableName = "orders" + cnt;
+	}
 	
 	/*
 	 * 将预约信息添加进数据库
 	 * param info
 	 */
 	public void add(OrderInfo info) {
-		String sql = "insert into orders values(?, ?, ?, ?, ?)";
+		String sql = "insert into " + tableName + " values(?, ?, ?, ?, ?)";
 		try (Connection c = DBUtil.getConnection();
 				PreparedStatement ps = c.prepareStatement(sql)){
-			ps.setInt(1, info.getOrderid());	//预约编号
+			ps.setInt(1, info.getOrderid());	//预约表编号
 			ps.setString(2, info.getUid());		//身份证号
 			ps.setString(3, info.getUname());	//姓名
 			ps.setString(4, info.getUtel());	//手机号码
@@ -38,18 +75,18 @@ public class OrderHandle {
 	 * param orderid
 	 * return boolean
 	 */
-	public boolean IsLegalOrderid(String orderid) {
+	public boolean IsLegalOrderid(String uid) {
 		
 		// 身份证号码必须为数字(18位的新身份证最后一位可以是x)
 		Pattern pt = Pattern.compile("(^\\d{15}$)|(\\d{17}(?:\\d|x|X)$)");
-		Matcher mt = pt.matcher(orderid);
+		Matcher mt = pt.matcher(uid);
 		if (!mt.find())
 			return false;
 		
 		// 验证生日是否合法
-		String strYear = orderid.substring(6, 10);// 年份
-        String strMonth = orderid.substring(10, 12);// 月份
-        String strDay = orderid.substring(12, 14);// 日期
+		String strYear = uid.substring(6, 10);// 年份
+        String strMonth = uid.substring(10, 12);// 月份
+        String strDay = uid.substring(12, 14);// 日期
         String birthday = strYear + "-" + strMonth + "-" + strDay;
         //括号内为日期格式，y代表年份，M代表年份中的月份（为避免与小时中的分钟数m冲突，此处用M），d代表月份中的天数
         SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd");
@@ -67,12 +104,12 @@ public class OrderHandle {
         				"7", "9","10", "5", "8", "4", "2" };
         int sum = 0;
         for (int i = 0; i < 17; i++) {
-            sum = sum + Integer.parseInt(String.valueOf(orderid.charAt(i)))
+            sum = sum + Integer.parseInt(String.valueOf(uid.charAt(i)))
             		* Integer.parseInt(Wi[i]);
         }
         int modValue = sum % 11;
         String strVerifyCode = VarifyCode[modValue];
-        if(!strVerifyCode.equals(orderid.substring(17, 18).toUpperCase()))
+        if(!strVerifyCode.equals(uid.substring(17, 18).toUpperCase()))
         	return false;
 		
 		return true;
@@ -84,7 +121,8 @@ public class OrderHandle {
 	 * return boolean
 	 */
 	public boolean checkUtel(String utel) {
-		String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";
+		String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|"
+				+ "(17[013678])|(18[0,5-9]))\\d{8}$";
 		if(utel.length() != 11)
 			return false;
 		Pattern p = Pattern.compile(regex);
@@ -110,15 +148,17 @@ public class OrderHandle {
 	}
 	
 	/*
-	 * 检查该用户是否已登记
+	 * 检查该用户是否已登记（是：返回false）
+	 * String uid, String utel
+	 * return boolean
 	 */
-	public boolean isRegister(String orderid, String utel) {
-		String sql = "select * from orders where orderid = '" + orderid + "'"
+	public boolean isRegister(String uid, String utel) {
+		String sql = "select * from " + tableName + " where orderid = '" + uid + "'"
 					+" or utel = '" + utel +"'";
 		try (Connection c = DBUtil.getConnection();
 				PreparedStatement ps = c.prepareStatement(sql)){
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
+			if(rs.next()) { //如果存在说明已登记
 				return false;
 			}
 		} catch (SQLException e) {
@@ -126,4 +166,10 @@ public class OrderHandle {
 		}
 		return true;
 	}
+	
+	/*
+	 * 检查该用户是否再前三次中签过（是：返回false）
+	 * String uid, String utel
+	 * return boolean
+	 */
 }
