@@ -17,17 +17,56 @@
  * @see
  */
 public class DispatcherInfo {
+
     int dispatcherId;
 
-    boolean dispatcher;
+    String uid;
 
-    DispatcherHandler dh;
+    String uname;
 
-    int masknum = 0;
+    String uTel;
 
-    public DispatcherInfo(DispatcherHandler dh) {
-        this.dh = dh;
+    int masknum;
 
+    public DispatcherInfo(int dispatcherId, String uid, String uname, String uTel, int masknum) {
+
+        this.dispatcherId = dispatcherId;
+        this.uid = uid;
+        this.uname = uname;
+        this.uTel = uTel;
+        this.masknum = masknum;
+    }
+
+    public int getMasknum() {
+        return masknum;
+    }
+
+    public void setMasknum(int masknum) {
+        this.masknum = masknum;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
+    public String getuTel() {
+        return uTel;
+    }
+
+    public void setuTel(String uTel) {
+        this.uTel = uTel;
     }
 
     public int getDispatcherId() {
@@ -36,21 +75,6 @@ public class DispatcherInfo {
 
     public void setDispatcherId(int dispatcherId) {
         this.dispatcherId = dispatcherId;
-    }
-
-    public boolean isDispatcher() {
-        return dispatcher;
-    }
-
-    public void setDispatcher(boolean dispatcher) {
-        this.dispatcher = dispatcher;
-    }
-
-    public void isDrawed(int ordernum) {
-        if (dh.hs.contains(dispatcherId)) {
-            dispatcher = true;
-            masknum = ordernum;
-        }
     }
 
 }
