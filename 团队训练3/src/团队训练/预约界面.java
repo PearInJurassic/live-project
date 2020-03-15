@@ -1,6 +1,4 @@
 package 团队训练;
-
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -94,7 +92,10 @@ public class 预约界面 extends JFrame {
 		textField_2.setBounds(335, 197, 180, 21);
 		contentPane.add(textField_2);
 		
-		JComboBox comboBox = new JComboBox();
+		JComboBox <String>comboBox = new JComboBox<String>();
+		comboBox.addItem("1");
+		comboBox.addItem("2");
+		comboBox.addItem("3");
 		comboBox.setBounds(335, 252, 180, 21);
 		contentPane.add(comboBox);
 		
