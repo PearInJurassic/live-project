@@ -74,4 +74,22 @@ public class OrderHandle {
 		
 		return true;
 	}
+	
+	/*
+	 * 简单的手机号码验证
+	 * param utel
+	 * return boolean
+	 */
+	public static boolean checkUtel(String utel) {
+		String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";
+		if(utel.length() != 11)
+			return false;
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(utel);
+		boolean isMatch = m.matches();
+		if(isMatch)
+			return true;
+		else 
+			return false;
+	}
 }
