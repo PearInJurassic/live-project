@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +16,31 @@ public class OrderHandle {
 	
 	static int cnt = 1; //计数表名后的数字
 	static String tableName = "orders" + cnt; //表名
+	
+	static public String[] table = {"1", "2", "3"};
+	
+	public OrderHandle() {
+		String t;
+		int lastest = 0;
+		try (Connection c = DBUtil.getConnection()){
+            Statement stmt=c.createStatement();
+			//获取全部表名
+            String sql="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                t = rs.getString("TABLE_NAME");
+                if(t.startsWith("dispatch")){
+                    int temp = Integer.parseInt(t.substring(8));
+                    if(temp > lastest)
+                        lastest = temp;//以dispatch开头的表中后面数字最大的
+                }
+            }
+            for(int i = 0; i < 3 && lastest - i > 0; i++)
+            	table[i] = "dispatch" + String.valueOf(lastest - i);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	/*
 	 * 点击开始预约新建预约表
 	 */
@@ -49,6 +75,8 @@ public class OrderHandle {
 	public void finishTable() {
 		cnt++;
 		tableName = "orders" + cnt;
+		for(int i = 0; i < 3; i++)
+        	table[i] = "dispatch" + Integer.parseInt(table[i].substring(8));
 	}
 	
 	/*
@@ -172,4 +200,24 @@ public class OrderHandle {
 	 * String uid, String utel
 	 * return boolean
 	 */
+	public boolean isWin(String uid, String utel){
+        PreparedStatement ps;
+        String sql;
+        ResultSet rs;
+        try (Connection c = DBUtil.getConnection()){
+            for(int i = 0; i < 3; i++) {
+                sql = "select * from " + table[i] + " where dispatchid = '" + uid + "'"
+    					+" or utel = '" + utel +"'";
+                ps = c.prepareStatement(sql);
+                rs = ps.executeQuery();
+    			if(rs.next()) { //如果存在说明已中签
+    				return false;
+    			}
+    			rs.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 }
