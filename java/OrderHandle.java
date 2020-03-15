@@ -16,8 +16,8 @@ import test.DBUtil;
 public class OrderHandle {
 	
 	static int num = 1;
-	static int cnt = 1; //¼ÆÊı±íÃûºóµÄÊı×Ö
-	static String tableName = "orders" + cnt; //±íÃû
+	static int cnt = 1; //è®¡æ•°è¡¨ååçš„æ•°å­—
+	static String tableName = "orders" + cnt; //è¡¨å
 	
 	static public String[] table = {"1", "2", "3"};
 	
@@ -26,7 +26,7 @@ public class OrderHandle {
 		int lastest = 0;
 		try (Connection c = DBUtil.getConnection()){
             Statement stmt=c.createStatement();
-			//»ñÈ¡È«²¿±íÃû
+			//è·å–å…¨éƒ¨è¡¨å
             String sql="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
@@ -34,7 +34,7 @@ public class OrderHandle {
                 if(t.startsWith("dispatch")){
                     int temp = Integer.parseInt(t.substring(8));
                     if(temp > lastest)
-                        lastest = temp;//ÒÔdispatch¿ªÍ·µÄ±íÖĞºóÃæÊı×Ö×î´óµÄ
+                        lastest = temp;//ä»¥dispatchå¼€å¤´çš„è¡¨ä¸­åé¢æ•°å­—æœ€å¤§çš„
                 }
             }
             for(int i = 0; i < 3 && lastest - i > 0; i++)
@@ -44,7 +44,7 @@ public class OrderHandle {
 		}
 	}
 	/*
-	 * µã»÷¿ªÊ¼Ô¤Ô¼ĞÂ½¨Ô¤Ô¼±í
+	 * ç‚¹å‡»å¼€å§‹é¢„çº¦æ–°å»ºé¢„çº¦è¡¨
 	 */
 	public void createTable() {
 		String sql;
@@ -72,29 +72,29 @@ public class OrderHandle {
 	}
 	
 	/*
-	 * µã»÷½áÊøÔ¤Ô¼ÕâÕÅ±íĞÅÏ¢¹Ì¶¨²»ÔÙ¸ü¸Ä£¨¼´Ìø¹ıÕâÕÅ±í£©
+	 * ç‚¹å‡»ç»“æŸé¢„çº¦è¿™å¼ è¡¨ä¿¡æ¯å›ºå®šä¸å†æ›´æ”¹ï¼ˆå³è·³è¿‡è¿™å¼ è¡¨ï¼‰
 	 */
 	public void finishTable() {
 		cnt++;
 		tableName = "orders" + cnt;
 		for(int i = 0; i < 3; i++)
         	table[i] = "dispatch" + Integer.parseInt(table[i].substring(8));
-		num = 1; //Ô¤Ô¼±àºÅÖØÖÃ
+		num = 1; //é¢„çº¦ç¼–å·é‡ç½®
 	}
 	
 	/*
-	 * ½«Ô¤Ô¼ĞÅÏ¢Ìí¼Ó½øÊı¾İ¿â
+	 * å°†é¢„çº¦ä¿¡æ¯æ·»åŠ è¿›æ•°æ®åº“
 	 * param info
 	 */
 	public void add(OrderInfo info) {
 		String sql = "insert into " + tableName + " values(?, ?, ?, ?, ?)";
 		try (Connection c = DBUtil.getConnection();
 				PreparedStatement ps = c.prepareStatement(sql)){
-			ps.setInt(1, num++);	//Ô¤Ô¼±í±àºÅ
-			ps.setString(2, info.getUid());		//Éí·İÖ¤ºÅ
-			ps.setString(3, info.getUname());	//ĞÕÃû
-			ps.setString(4, info.getUtel());	//ÊÖ»úºÅÂë
-			ps.setInt(5, info.getMasknum());	//¿ÚÕÖÊıÁ¿
+			ps.setInt(1, num++);	//é¢„çº¦è¡¨ç¼–å·
+			ps.setString(2, info.getUid());		//èº«ä»½è¯å·
+			ps.setString(3, info.getUname());	//å§“å
+			ps.setString(4, info.getUtel());	//æ‰‹æœºå·ç 
+			ps.setInt(5, info.getMasknum());	//å£ç½©æ•°é‡
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -102,34 +102,34 @@ public class OrderHandle {
 	}
 	
 	/*
-	 * ¼òµ¥Ğ£ÑéÉí·İÖ¤ºÅÂëÊÇ·ñºÏ·¨£¨ºÏ·¨£º·µ»Øtrue£©
+	 * ç®€å•æ ¡éªŒèº«ä»½è¯å·ç æ˜¯å¦åˆæ³•ï¼ˆåˆæ³•ï¼šè¿”å›trueï¼‰
 	 * param orderid
 	 * return boolean
 	 */
 	public boolean IsLegalOrderid(String uid) {
 		
-		// Éí·İÖ¤ºÅÂë±ØĞëÎªÊı×Ö(18Î»µÄĞÂÉí·İÖ¤×îºóÒ»Î»¿ÉÒÔÊÇx)
+		// èº«ä»½è¯å·ç å¿…é¡»ä¸ºæ•°å­—(18ä½çš„æ–°èº«ä»½è¯æœ€åä¸€ä½å¯ä»¥æ˜¯x)
 		Pattern pt = Pattern.compile("(^\\d{15}$)|(\\d{17}(?:\\d|x|X)$)");
 		Matcher mt = pt.matcher(uid);
 		if (!mt.find())
 			return false;
 		
-		// ÑéÖ¤ÉúÈÕÊÇ·ñºÏ·¨
-		String strYear = uid.substring(6, 10);// Äê·İ
-        String strMonth = uid.substring(10, 12);// ÔÂ·İ
-        String strDay = uid.substring(12, 14);// ÈÕÆÚ
+		// éªŒè¯ç”Ÿæ—¥æ˜¯å¦åˆæ³•
+		String strYear = uid.substring(6, 10);// å¹´ä»½
+        String strMonth = uid.substring(10, 12);// æœˆä»½
+        String strDay = uid.substring(12, 14);// æ—¥æœŸ
         String birthday = strYear + "-" + strMonth + "-" + strDay;
-        //À¨ºÅÄÚÎªÈÕÆÚ¸ñÊ½£¬y´ú±íÄê·İ£¬M´ú±íÄê·İÖĞµÄÔÂ·İ£¨Îª±ÜÃâÓëĞ¡Ê±ÖĞµÄ·ÖÖÓÊım³åÍ»£¬´Ë´¦ÓÃM£©£¬d´ú±íÔÂ·İÖĞµÄÌìÊı
+        //æ‹¬å·å†…ä¸ºæ—¥æœŸæ ¼å¼ï¼Œyä»£è¡¨å¹´ä»½ï¼ŒMä»£è¡¨å¹´ä»½ä¸­çš„æœˆä»½ï¼ˆä¸ºé¿å…ä¸å°æ—¶ä¸­çš„åˆ†é’Ÿæ•°må†²çªï¼Œæ­¤å¤„ç”¨Mï¼‰ï¼Œdä»£è¡¨æœˆä»½ä¸­çš„å¤©æ•°
         SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			sd.setLenient(false);//´Ë´¦Ö¸¶¨ÈÕÆÚ/Ê±¼ä½âÎöÊÇ·ñ²»ÑÏ¸ñ£¬ÔÚtrueÊÇ²»ÑÏ¸ñ£¬falseÊ±ÎªÑÏ¸ñ
-			sd.parse(birthday);//´Ó¸ø¶¨×Ö·û´®µÄ¿ªÊ¼½âÎöÎÄ±¾£¬ÒÔÉú³ÉÒ»¸öÈÕÆÚ
+			sd.setLenient(false);//æ­¤å¤„æŒ‡å®šæ—¥æœŸ/æ—¶é—´è§£ææ˜¯å¦ä¸ä¸¥æ ¼ï¼Œåœ¨trueæ˜¯ä¸ä¸¥æ ¼ï¼Œfalseæ—¶ä¸ºä¸¥æ ¼
+			sd.parse(birthday);//ä»ç»™å®šå­—ç¬¦ä¸²çš„å¼€å§‹è§£ææ–‡æœ¬ï¼Œä»¥ç”Ÿæˆä¸€ä¸ªæ—¥æœŸ
 		}
 		catch (Exception e) {
 			return false;
 		}
 		
-		//ÅĞ¶ÏµÚ18Î»Ğ£ÑéÂëÊÇ·ñÕıÈ·
+		//åˆ¤æ–­ç¬¬18ä½æ ¡éªŒç æ˜¯å¦æ­£ç¡®
 		String[] VarifyCode = { "1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2" };
         String[] Wi = { "7", "9", "10", "5", "8", "4", "2", "1", "6", "3",
         				"7", "9","10", "5", "8", "4", "2" };
@@ -147,7 +147,7 @@ public class OrderHandle {
 	}
 	
 	/*
-	 * ¼òµ¥µÄÊÖ»úºÅÂëÑéÖ¤
+	 * ç®€å•çš„æ‰‹æœºå·ç éªŒè¯
 	 * param utel
 	 * return boolean
 	 */
@@ -166,12 +166,12 @@ public class OrderHandle {
 	}
 	
 	/*
-	 * ÑéÖ¤µ¥¸öÓÃ»§×î¸ß¿ÉÔ¤Ô¼¿ÚÕÖÊıÁ¿ÊÇ·ñ³¬³ö
+	 * éªŒè¯å•ä¸ªç”¨æˆ·æœ€é«˜å¯é¢„çº¦å£ç½©æ•°é‡æ˜¯å¦è¶…å‡º
 	 * param masknum
 	 * return boolean
 	 */
 	public boolean checkMasknum(String masknum) {
-		int Max = 3; //Èç¹ûĞèÒªÉèÖÃ×ÜÁ¿ÔÙ¸Ä´Ë´¦
+		int Max = 3; //å¦‚æœéœ€è¦è®¾ç½®æ€»é‡å†æ”¹æ­¤å¤„
 		int num = Integer.parseInt(masknum);
 		if(num > Max)
 			return false;
@@ -179,7 +179,7 @@ public class OrderHandle {
 	}
 	
 	/*
-	 * ¼ì²é¸ÃÓÃ»§ÊÇ·ñÒÑµÇ¼Ç£¨ÊÇ£º·µ»Øfalse£©
+	 * æ£€æŸ¥è¯¥ç”¨æˆ·æ˜¯å¦å·²ç™»è®°ï¼ˆæ˜¯ï¼šè¿”å›falseï¼‰
 	 * String uid, String utel
 	 * return boolean
 	 */
@@ -189,7 +189,7 @@ public class OrderHandle {
 		try (Connection c = DBUtil.getConnection();
 				PreparedStatement ps = c.prepareStatement(sql)){
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()) { //Èç¹û´æÔÚËµÃ÷ÒÑµÇ¼Ç
+			if(rs.next()) { //å¦‚æœå­˜åœ¨è¯´æ˜å·²ç™»è®°
 				return false;
 			}
 		} catch (SQLException e) {
@@ -199,7 +199,7 @@ public class OrderHandle {
 	}
 	
 	/*
-	 * ¼ì²é¸ÃÓÃ»§ÊÇ·ñÔÙÇ°Èı´ÎÖĞÇ©¹ı£¨ÊÇ£º·µ»Øfalse£©
+	 * æ£€æŸ¥è¯¥ç”¨æˆ·æ˜¯å¦å†å‰ä¸‰æ¬¡ä¸­ç­¾è¿‡ï¼ˆæ˜¯ï¼šè¿”å›falseï¼‰
 	 * String uid, String utel
 	 * return boolean
 	 */
@@ -213,7 +213,7 @@ public class OrderHandle {
     					+" or utel = '" + utel +"'";
                 ps = c.prepareStatement(sql);
                 rs = ps.executeQuery();
-    			if(rs.next()) { //Èç¹û´æÔÚËµÃ÷ÒÑÖĞÇ©
+    			if(rs.next()) { //å¦‚æœå­˜åœ¨è¯´æ˜å·²ä¸­ç­¾
     				return false;
     			}
     			rs.close();
@@ -226,7 +226,7 @@ public class OrderHandle {
 	
 	
 	/*
-	 * ·µ»ØÔ¤Ô¼±àºÅ
+	 * è¿”å›é¢„çº¦ç¼–å·
 	 */
 	public String getOrderiD() {
 		return cnt + "-" + num;

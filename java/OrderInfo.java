@@ -1,11 +1,11 @@
-package pojo;
+package test;
 
 public class OrderInfo {
-	private int orderid;  //Ô¤Ô¼±àºÅ
-	private String uid;   //Éí·İÖ¤ºÅ
-	private String uname; //ĞÕÃû
-	private String utel;  //ÊÖ»úºÅÂë
-	private int masknum;  //¿ÚÕÖÊıÁ¿
+	private int orderid;  //é¢„çº¦è¡¨ç¼–å·
+	private String uid;   //èº«ä»½è¯å·
+	private String uname; //å§“å
+	private String utel;  //æ‰‹æœºå·ç 
+	private int masknum;  //å£ç½©æ•°é‡
 	
 	public int getOrderid() {
 		return orderid;
