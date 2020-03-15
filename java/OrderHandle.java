@@ -92,4 +92,19 @@ public class OrderHandle {
 		else 
 			return false;
 	}
+	
+	/*
+	 * 验证口罩数量
+	 * param masknum
+	 * return boolean
+	 */
+	public static boolean checkMasknum(String masknum) {
+		int Max = 3; //如果需要设置总量再改此处
+		int num = Integer.parseInt(masknum);
+		if(num > Max)
+			return false;
+		return true;
+	}
+	
+	
 }
