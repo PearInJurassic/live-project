@@ -1,4 +1,4 @@
-package ÍÅ¶ÓÑµÁ·;
+package test;
 
 import java.awt.EventQueue;
 
@@ -6,9 +6,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.security.spec.DSAGenParameterSpec;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 
@@ -16,6 +19,8 @@ public class mainWindow extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
+	
+	private int n;
 
 	/**
 	 * Launch the application.
@@ -48,30 +53,30 @@ public class mainWindow extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel label = new JLabel("\u53E3\u7F69\u9884\u7EA6\u7CFB\u7EDF");
-		label.setFont(new Font("ËÎÌå", Font.BOLD, 25));
+		label.setFont(new Font("å®‹ä½“", Font.BOLD, 25));
 		label.setBounds(247, 9, 193, 58);
 		contentPane.add(label);
 		
-		//¿ÚÕÖÔ¤Ô¼
+		//å£ç½©é¢„çº¦
 		JButton bt1 = new JButton("\u53E3\u7F69\u9884\u7EA6");
-		bt1.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		bt1.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		bt1.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) 
 		{
-				//Ô¤Ô¼°´Å¥¼àÌıº¯Êı
+				//é¢„çº¦æŒ‰é’®ç›‘å¬å‡½æ•°
 				new order();
 		}
 		});
 		bt1.setBounds(67, 288, 128, 65);
 		contentPane.add(bt1);
 		
-		//²éÑ¯ÖĞÇ©
+		//æŸ¥è¯¢ä¸­ç­¾
 		JButton button = new JButton("\u67E5\u8BE2\u4E2D\u7B7E");
-		button.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		button.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-					//¼àÌıº¯Êı
+					//ç›‘å¬å‡½æ•°
 					new search();
 			}
 			});
@@ -79,7 +84,7 @@ public class mainWindow extends JFrame {
 		contentPane.add(button);
 		
 		JLabel label_1 = new JLabel("\u8BBE\u7F6E\u53E3\u7F69\u603B\u91CF\uFF1A");
-		label_1.setFont(new Font("ËÎÌå", Font.BOLD, 15));
+		label_1.setFont(new Font("å®‹ä½“", Font.BOLD, 15));
 		label_1.setBounds(167, 77, 128, 43);
 		contentPane.add(label_1);
 		
@@ -87,31 +92,51 @@ public class mainWindow extends JFrame {
 		textField.setBounds(340, 88, 185, 21);
 		contentPane.add(textField);
 		textField.setColumns(10);
+		textField.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				n = Integer.parseInt(textField.getText());
+				JOptionPane.showMessageDialog(null, "è®¾ç½®å£ç½©æ€»æ•°ä¸º" + n,
+						"æç¤º", JOptionPane.DEFAULT_OPTION);
+			}
+		});
 		
 		JLabel label_2 = new JLabel("\u529F\u80FD\u6A21\u5757");
-		label_2.setFont(new Font("ËÎÌå", Font.BOLD, 25));
+		label_2.setFont(new Font("å®‹ä½“", Font.BOLD, 25));
 		label_2.setBounds(265, 218, 133, 35);
 		contentPane.add(label_2);
 		
-		//¿ªÊ¼Ô¤Ô¼
+		//å¼€å§‹é¢„çº¦
 		JButton button_2 = new JButton("\u5F00\u59CB\u9884\u7EA6");
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				//¼àÌıº¯Êı
+				OrderHandle orderHandle = new OrderHandle();
+				orderHandle.createTable();
+				JOptionPane.showMessageDialog(null, "æœ¬æ¬¡é¢„çº¦å¼€å§‹",
+						"æç¤º", JOptionPane.DEFAULT_OPTION);
 			}
 		});
-		button_2.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		button_2.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		button_2.setBounds(67, 143, 128, 65);
 		contentPane.add(button_2);
 		
-		//½áÊøÔ¤Ô¼
+		//ç»“æŸé¢„çº¦
 		JButton button_1 = new JButton("\u7ED3\u675F\u9884\u7EA6");
-		button_1.setFont(new Font("ËÎÌå", Font.BOLD, 12));
-		button.addActionListener(new ActionListener() {
+		button_1.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
+		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-					//¼àÌıº¯Êı
+					//ç›‘å¬å‡½æ•°
+				OrderHandle orderHandle = new OrderHandle();
+				orderHandle.finishTable();
+				DispatcherHandle dispatcherHandle 
+					= new DispatcherHandle();
+				dispatcherHandle.createTable();
+				dispatcherHandle.draw(n);
+				dispatcherHandle.addToDispatcherTable();
+				dispatcherHandle.finishTable();
+				JOptionPane.showMessageDialog(null, "æœ¬æ¬¡é¢„çº¦ç»“æŸ",
+						"æç¤º", JOptionPane.DEFAULT_OPTION);
 			}
 			});
 		button_1.setBounds(444, 143, 128, 65);

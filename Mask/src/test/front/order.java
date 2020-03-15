@@ -1,10 +1,12 @@
-package �Ŷ�ѵ��;
+package test;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -49,32 +51,32 @@ public class order extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel label = new JLabel("\u53E3\u7F69\u9884\u7EA6");
-		label.setFont(new Font("����", Font.BOLD, 20));
+		label.setFont(new Font("宋体", Font.BOLD, 20));
 		label.setBounds(329, 10, 92, 65);
 		contentPane.add(label);
 		
 		JLabel label_1 = new JLabel("\u4FE1\u606F\u767B\u8BB0\uFF1B");
-		label_1.setFont(new Font("����", Font.BOLD, 12));
+		label_1.setFont(new Font("宋体", Font.BOLD, 12));
 		label_1.setBounds(26, 67, 69, 27);
 		contentPane.add(label_1);
 		
 		JLabel label_2 = new JLabel("\u771F\u5B9E\u59D3\u540D");
-		label_2.setFont(new Font("����", Font.BOLD, 12));
+		label_2.setFont(new Font("宋体", Font.BOLD, 12));
 		label_2.setBounds(223, 103, 60, 15);
 		contentPane.add(label_2);
 		
 		JLabel label_3 = new JLabel("\u8EAB\u4EFD\u8BC1\u53F7");
-		label_3.setFont(new Font("����", Font.BOLD, 12));
+		label_3.setFont(new Font("宋体", Font.BOLD, 12));
 		label_3.setBounds(223, 153, 60, 15);
 		contentPane.add(label_3);
 		
 		JLabel label_4 = new JLabel("\u624B\u673A\u53F7\u7801");
-		label_4.setFont(new Font("����", Font.BOLD, 12));
+		label_4.setFont(new Font("宋体", Font.BOLD, 12));
 		label_4.setBounds(223, 200, 60, 15);
 		contentPane.add(label_4);
 		
 		JLabel label_5 = new JLabel("\u9884\u7EA6\u6570\u91CF");
-		label_5.setFont(new Font("����", Font.BOLD, 12));
+		label_5.setFont(new Font("宋体", Font.BOLD, 12));
 		label_5.setBounds(223, 255, 60, 15);
 		contentPane.add(label_5);
 		
@@ -100,26 +102,57 @@ public class order extends JFrame {
 		comboBox.setBounds(335, 252, 180, 21);
 		contentPane.add(comboBox);
 		
-		//�ύ
+		//提交
 		JButton btnNewButton = new JButton("\u63D0\u4EA4");
-		btnNewButton.setFont(new Font("����", Font.BOLD, 12));
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 12));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				//��������
-				//������һ������
-				setVisible(false);
+				//监听函数
+				//返回上一个界面
+				OrderInfo orderInfo = new OrderInfo();
+				OrderHandle orderHandle = new OrderHandle();
+				String uname = textField.getText();
+				String uid = textField_1.getText();
+				String utel = textField_2.getText();
+				String masknum = (String)comboBox.getSelectedItem();
+				if(!orderHandle.IsLegalOrderid(uid)) {
+					JOptionPane.showMessageDialog(null, "身份证号无效",
+							"预约失败", JOptionPane.ERROR_MESSAGE);
+				} else if(!orderHandle.checkUtel(utel)) {
+					JOptionPane.showMessageDialog(null, "手机号无效",
+							"预约失败", JOptionPane.ERROR_MESSAGE);
+				} else if(!orderHandle.checkMasknum(masknum)) {
+					JOptionPane.showMessageDialog(null, "预约口罩数量最高可预约口罩数量",
+							"预约失败", JOptionPane.ERROR_MESSAGE);
+				} else if(!orderHandle.isRegister(uid, utel)) {
+					JOptionPane.showMessageDialog(null, "该手机号或者身份证号已经在本次摇号登记过了",
+							"预约失败", JOptionPane.ERROR_MESSAGE);
+				} else if(!orderHandle.isWin(uid, utel)) {
+					JOptionPane.showMessageDialog(null, "该手机号或者身份证号在此前三次预约中成功中签",
+							"预约失败", JOptionPane.ERROR_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, "预约成功,你的预约编号为" + orderHandle.getOrderiD(),
+							"预约成功", JOptionPane.DEFAULT_OPTION);
+					orderInfo.setUid(uid);
+					orderInfo.setUname(uname);
+					orderInfo.setUtel(utel);
+					orderInfo.setMasknum(Integer.parseInt(masknum));
+					orderHandle.add(orderInfo);
+					setVisible(false);
+				}
+				
 			}
 		});
 		btnNewButton.setBounds(305, 336, 143, 43);
 		contentPane.add(btnNewButton);
 		
-		//����������
+		//返回主界面
 		JButton btnNewButton_1 = new JButton("\u8FD4\u56DE\u4E3B\u754C\u9762");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				//��������
+				//监听函数
 				setVisible(false);
 			}
 		});

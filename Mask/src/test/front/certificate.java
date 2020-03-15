@@ -1,4 +1,4 @@
-package ÍÅ¶ÓÑµÁ·;
+package test;
 
 import java.awt.EventQueue;
 
@@ -19,6 +19,7 @@ public class certificate extends JFrame {
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -31,11 +32,12 @@ public class certificate extends JFrame {
 			}
 		});
 	}
+	*/
 
 	/**
 	 * Create the frame.
 	 */
-	public certificate() {
+	public certificate(DispatcherInfo dispatcherInfo) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
 		setBounds(100, 100, 520, 427);
@@ -47,77 +49,77 @@ public class certificate extends JFrame {
 		
 		//
 		JLabel label = new JLabel("\u8D2D\u4E70\u51ED\u8BC1");
-		label.setFont(new Font("ËÎÌå", Font.BOLD, 20));
+		label.setFont(new Font("å®‹ä½“", Font.BOLD, 20));
 		label.setBounds(205, 10, 91, 52);
 		contentPane.add(label);
 		
 		JLabel label_1 = new JLabel("\u771F\u5B9E\u59D3\u540D\uFF1A");
-		label_1.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		label_1.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		label_1.setBounds(130, 77, 70, 18);
 		contentPane.add(label_1);
 		
 		JLabel label_2 = new JLabel("\u8EAB\u4EFD\u8BC1\u53F7\uFF1A");
-		label_2.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		label_2.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		label_2.setBounds(130, 131, 70, 18);
 		contentPane.add(label_2);
 		
 		JLabel label_3 = new JLabel("\u624B\u673A\u53F7\u7801\uFF1A");
-		label_3.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		label_3.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		label_3.setBounds(130, 187, 70, 18);
 		contentPane.add(label_3);
 		
 		JLabel label_4 = new JLabel("\u9884\u7EA6\u6570\u91CF\uFF1A");
-		label_4.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		label_4.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		label_4.setBounds(130, 245, 70, 18);
 		contentPane.add(label_4);
 		
-		//È·ÈÏ
+		//ç¡®è®¤
 		JButton button = new JButton("\u786E\u8BA4");
-		button.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		button.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-					//Ô¤Ô¼°´Å¥¼àÌıº¯Êı
+					//é¢„çº¦æŒ‰é’®ç›‘å¬å‡½æ•°
 					setVisible(false);
 			}
 			});
 		button.setBounds(181, 310, 142, 42);
 		contentPane.add(button);
 		
-		//·µ»ØÖ÷½çÃæ
+		//è¿”å›ä¸»ç•Œé¢
 		JButton button_1 = new JButton("\u8FD4\u56DE\u4E3B\u754C\u9762");
-		button_1.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		button_1.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-					//¼àÌıº¯Êı
+					//ç›‘å¬å‡½æ•°
 					setVisible(false);
 			}
 			});
 		button_1.setBounds(365, 21, 129, 29);
 		contentPane.add(button_1);
 		
-		//ÕæÊµĞÕÃû
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		//çœŸå®å§“å
+		JLabel lblNewLabel = new JLabel("" + dispatcherInfo.getUname());
+		lblNewLabel.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		lblNewLabel.setBounds(283, 78, 211, 16);
 		contentPane.add(lblNewLabel);
 		
-		//Éí·İÖ¤ºÅÂë
-		JLabel label_5 = new JLabel("New label");
-		label_5.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		//èº«ä»½è¯å·ç 
+		JLabel label_5 = new JLabel("" + dispatcherInfo.getUid());
+		label_5.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		label_5.setBounds(283, 132, 211, 16);
 		contentPane.add(label_5);
 		
-		//ÊÖ»úºÅÂë
-		JLabel label_6 = new JLabel("New label");
-		label_6.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		//æ‰‹æœºå·ç 
+		JLabel label_6 = new JLabel("" + dispatcherInfo.getuTel());
+		label_6.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		label_6.setBounds(283, 188, 211, 16);
 		contentPane.add(label_6);
 		
-		//Ô¤Ô¼ÊıÁ¿
-		JLabel label_7 = new JLabel("New label");
-		label_7.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		//é¢„çº¦æ•°é‡
+		JLabel label_7 = new JLabel("" + dispatcherInfo.getMasknum());
+		label_7.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		label_7.setBounds(283, 246, 211, 16);
 		contentPane.add(label_7);
 	}

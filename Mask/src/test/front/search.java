@@ -1,4 +1,4 @@
-package ÍÅ¶ÓÑµÁ·;
+package test;
 
 import java.awt.EventQueue;
 
@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,12 +51,12 @@ public class search extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel label = new JLabel("\u67E5\u8BE2\u754C\u9762");
-		label.setFont(new Font("ËÎÌå", Font.BOLD, 20));
+		label.setFont(new Font("å®‹ä½“", Font.BOLD, 20));
 		label.setBounds(166, 10, 116, 36);
 		contentPane.add(label);
 		
 		JLabel label_1 = new JLabel("\u9884\u7EA6\u7F16\u53F7\uFF1A");
-		label_1.setFont(new Font("ËÎÌå", Font.BOLD, 12));
+		label_1.setFont(new Font("å®‹ä½“", Font.BOLD, 12));
 		label_1.setBounds(91, 93, 80, 15);
 		contentPane.add(label_1);
 		
@@ -63,26 +65,29 @@ public class search extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		//È·ÈÏ²éÑ¯
+		//ç¡®è®¤æŸ¥è¯¢
 		JButton button = new JButton("\u786E\u8BA4\u67E5\u8BE2");
 		button.setBounds(145, 159, 137, 44);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-					//Ô¤Ô¼°´Å¥¼àÌıº¯Êı
-					new certificate();
+					//é¢„çº¦æŒ‰é’®ç›‘å¬å‡½æ•°
+					String id = textField.getText();
+					DispatcherHandle dispatcherHandle = new DispatcherHandle();
+					DispatcherInfo dispatcherInfo = dispatcherHandle.isDispatched(id);
+					new certificate(dispatcherInfo);
 			}
-			});
+		});
 		contentPane.add(button);
 		
-		//·µ»ØÖ÷½çÃæ
+		//è¿”å›ä¸»ç•Œé¢
 		JButton button_1 = new JButton("\u8FD4\u56DE\u4E3B\u754C\u9762");
 		button_1.setBounds(292, 10, 114, 23);
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				//¼àÌıº¯Êı
-				//·µ»ØÉÏÒ»¸ö½çÃæ
+				//ç›‘å¬å‡½æ•°
+				//è¿”å›ä¸Šä¸€ä¸ªç•Œé¢
 				setVisible(false);
 			}
 		});
