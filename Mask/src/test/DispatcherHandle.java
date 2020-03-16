@@ -122,7 +122,7 @@ public class DispatcherHandle {
         }
     }
 
- // 抽取ordersX里面的数据
+    // 抽取ordersX里面的数据
     public void draw(int num) {
         // 先查找总数
         String sql = "select count(*) from " + drawName;
@@ -144,8 +144,9 @@ public class DispatcherHandle {
         Random rm = new Random(1);
 
         while (hs.size() != num) {
-	    if(n == 0)
-        	break;
+            if(n==0) {
+                break;
+            }
             n--;
             hs.add(rm.nextInt(sum) + 1);
         }
